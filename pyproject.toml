@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "profilehunter"
+version = "0.1.0"
+description = "Aplicacion para encontrar y crear tablas con contactos de clientes potenciales"
+authors = ["SERGIO TEJEDOR MORENO <tejedor.moreno@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.13"
+selenium = "^4.14.0"
+icecream = "^2.1.3"
+beautifulsoup4 = "^4.12.2"
+requests = "^2.31.0"
+pydantic = "^2.4.2"
+pandas = "^2.1.2"
+tldextract = "^5.0.1"
+openpyxl = "^3.1.2"
+colorama = "^0.4.6"
+flet = "^0.11.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

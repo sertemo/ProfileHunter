@@ -1,0 +1,19 @@
+### PROFILE HUNTER 1.0 ###
+Bienvenido a la primera versión de Profile Hunter.
+Con esta aplicación podrás sacar información de empresas de los sectores que desees.
+
+Sigue estos pasos para poder utilizar la aplicación:
+1 - Ve a la barra superior, en la parte derecha y descarga FireFox y Geckodriver.
+2 - Descomprime Gecko Driver en el mismo directorio donde se ha descargado.
+3 - Si estás en Windows, agrega la ruta donde esté el archivo geckodriver.exe al PATH.
+4 - Dale un nombre a la carpeta dónde se guardarán los archivos excels con los contactos ('data' por defecto).
+5 - Escoge un número máximo de cazas a realizar (por defecto 10).
+6 - En el apartado 'Checkpoints Guardados' se almacena el avance de cada caza.
+7 - Puedes agregar un checkpoints a la caza para seguir cogiendo datos pinchando sobre la flecha blanca.
+8 - O Puedes comenzar con un nuevo sector escribiendo en 'Nueva Búsqueda'.
+9 - Los signos de puntuación como tildes etc se eliminarán para homogeneizar los sectores.
+10 - Todos los avances se pintarán en la sección 'Log'.
+
+¡ Buena Caza !
+
+-Done by STM 2023-
