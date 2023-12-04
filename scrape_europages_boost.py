@@ -158,7 +158,7 @@ def scrape_europages_boost(
     if (campos:=db_busquedas.find_one(campo_buscado='sector', valor_buscado=sector_busqueda)):
         resume = True
         _, sector, pag_resume, lista_resume, elemento_resume, *resto = campos
-        pag_totales, listas_totales, elementos_totales, _ = resto
+        pag_totales, listas_totales, elementos_totales, _, _ = resto
         if sector != sector_busqueda:
             msg = f"[{sector_busqueda}] || Los nombres de los sectores no coinciden"
             handle_log_print(msg, color='rojo_fuerte', **kwargs)

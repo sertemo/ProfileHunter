@@ -73,9 +73,9 @@ class TextoConsola(ft.UserControl):
 
 class LineaBusqueda(ft.UserControl):
     def __init__(self,
-                 sector:str,
-                 borrar_busqueda_func:Callable[[None], None]
-                 ) -> None:
+                sector:str,
+                borrar_busqueda_func:Callable[[None], None]
+                ) -> None:
         self.sector = sector
         self.borrar_busqueda = borrar_busqueda_func
         super().__init__()
@@ -97,23 +97,29 @@ class LineaBusqueda(ft.UserControl):
 
 class LineaCheckpoint(ft.UserControl):
     def __init__(self, 
-                 sector:str, 
-                 pagina:int, 
-                 lista:int, 
-                 elemento:int,
-                 paginas_totales:int,
-                 listas_totales:int,
-                 elementos_totales:int,
-                 fecha:str,
-                 agregar_func:Callable[[None], None],
-                 borrar_func:Callable[[None], None],
-                 ) -> None:
+                sector:str, 
+                pagina:int, 
+                lista:int, 
+                elemento:int,
+                paginas_totales:int,
+                listas_totales:int,
+                elementos_totales:int,
+                fecha:str,
+                agregar_func:Callable[[None], None],
+                borrar_func:Callable[[None], None],
+                ) -> None:
         super().__init__()        
         self.sector = sector
         self.fecha = fecha
         self.avance = [(pagina, paginas_totales), (lista, listas_totales), (elemento, elementos_totales)]
         self.agregar_func = agregar_func
         self.borrar_func = borrar_func
+        self.icono_rastrear = ft.IconButton(key=self.sector, 
+                                            icon=ft.icons.FIND_IN_PAGE,
+                                            icon_color=ft.colors.WHITE,
+                                            tooltip=f"Rastrea y comprueba si hay actualizaciones para {self.sector}",
+                                            on_click="",
+                                            )        
         self.icono_agregar = ft.IconButton(key=self.sector, 
                                             icon=ft.icons.ARROW_BACK, 
                                             icon_color=ft.colors.WHITE,
@@ -127,16 +133,17 @@ class LineaCheckpoint(ft.UserControl):
                                             on_click=self.borrar_func
                                             )
         self.progress_bar = ft.ProgressBar(height=4,
-                                           color=self.color_porcentaje, 
-                                           value=self.porcentaje_avance, 
+                                        color=self.color_porcentaje, 
+                                        value=self.porcentaje_avance, 
                                            tooltip=f"{round(self.porcentaje_avance * 100, 1)}%"
-                                           )
+                                        )
 
     @property
     def fila_iconos(self) -> None:
         if int(self.porcentaje_avance) == 1:
             return ft.Container(ft.Row([
-                self.icono_eliminar
+                self.icono_rastrear,
+                self.icono_eliminar,
             ],
             alignment=ft.MainAxisAlignment.END),
             width=120
@@ -171,7 +178,7 @@ class LineaCheckpoint(ft.UserControl):
             bgcolor=PALETA_TALSA['AZUL TALSA'],
             padding=0,
             border=ft.border.all(1, PALETA_TALSA['PRIMARY TEXT']),
-             alignment=ft.alignment.center,
+            alignment=ft.alignment.center,
         )
     
     @property

@@ -110,7 +110,7 @@ def main(page:ft.Page):
             if respuesta.status_code == 200:
                 with open(RUTA_GECKODRIVER / FILE_TO_DOWNLOAD, "wb") as f:
                     f.write(respuesta.content)
-                pintar_en_consola(f"Se ha descargado geckodriver win64 en {RUTA_GECKODRIVER} correctamente.", color="#00ff00")
+                pintar_en_consola(f"Se ha descargado geckodriver win64 en\n{RUTA_GECKODRIVER} correctamente.", color="#00ff00")
                 pintar_en_consola(f"Descomprime el archivo en esa misma ruta", color="#00ff00")
                 # TODO Agregar a PATH esta ruta ?
             else:
@@ -196,7 +196,7 @@ def main(page:ft.Page):
             return        
         # Comprobamos que geckodriver esté en la ruta establecida
         if Path(RUTA_GECKODRIVER / 'geckodriver.exe') not in RUTA_GECKODRIVER.iterdir():
-            pintar_en_consola(f"No se ha encontrado el archivo 'geckodriver.exe' en la ruta {RUTA_GECKODRIVER}. Descárgalo desde el menú superior derecho", color="#ff0000")
+            pintar_en_consola(f"No se ha encontrado el archivo 'geckodriver.exe' en la ruta\n {RUTA_GECKODRIVER}. Descárgalo desde el menú superior derecho", color="#ff0000")
             return
         # Comprobar que la ruta de geckodriver esté en el PATH de windows
         if not ruta_en_PATH(RUTA_GECKODRIVER):
@@ -329,7 +329,7 @@ def main(page:ft.Page):
         lista_checkpoints = db_busquedas.get_table()
         if lista_checkpoints:
             for check in lista_checkpoints:
-                _, sector, pagina, lista, elemento, paginas_totales, listas_totales, elementos_totales, fecha = check
+                _, sector, pagina, lista, elemento, paginas_totales, listas_totales, elementos_totales, fecha, _ = check
                 fila_checkpoint = LineaCheckpoint(
                     sector,
                     pagina,
@@ -439,13 +439,13 @@ def main(page:ft.Page):
                         'fecha TEXT',
                     )            
                 )
-                pintar_en_consola(f"Se ha creado la base de datos en {RUTA_DB}", "#00ff00")
+                pintar_en_consola(f"Se ha creado la base de datos en\n {RUTA_DB}", "#00ff00")
             except Exception as e:
-                pintar_en_consola(f"Error al crear la ruta raíz {RUTA_RAIZ}: {e}", "#ff0000")
+                pintar_en_consola(f"Error al crear la ruta raíz\n {RUTA_RAIZ}: {e}", "#ff0000")
             # Si no existe la ruta de geckodriver la creamos
             if not RUTA_GECKODRIVER.exists():
                 RUTA_GECKODRIVER.mkdir(parents=True)
-                pintar_en_consola(f"Se ha creado la ruta {RUTA_GECKODRIVER}", "#00ff00")
+                pintar_en_consola(f"Se ha creado la ruta\n {RUTA_GECKODRIVER}", "#00ff00")
                 #TODO Agregamos la ruta al PATH de windwos
 
     # Widgets #
@@ -481,6 +481,7 @@ def main(page:ft.Page):
         value=cargar_excels_path(),
         label_style=ft.TextStyle(size=16),
         text_align=ft.TextAlign.CENTER,
+        tooltip=RUTA_RAIZ,
         **PARAMETROS_INPUTS,
     )
     boton_guardar_path = ft.IconButton(
@@ -503,6 +504,7 @@ def main(page:ft.Page):
         label_style=ft.TextStyle(size=16),
         text_align=ft.TextAlign.CENTER,
         **PARAMETROS_INPUTS,
+        tooltip="Número máximo de contactos a extraer en la caza"
         )
     busqueda_texto = ft.TextField(
         label="Nueva búsqueda",

@@ -62,6 +62,10 @@ class SQLContext:
     def add_column(self, *, nombre_columna: str, tipo_dato: str) -> None:
         with SQLManager(self.db_filename) as c:
             c.execute(f"ALTER TABLE {self.tabla} ADD COLUMN {nombre_columna} {tipo_dato}")
+
+    def add_column_nullable(self, *, nombre_columna: str, tipo_dato: str) -> None:
+        with SQLManager(self.db_filename) as c:
+            c.execute(f"ALTER TABLE {self.tabla} ADD COLUMN {nombre_columna} {tipo_dato} NULL")
     
     def insert_one(self, columnas:dict) -> None:
         """inserta un registro en la tabla dada."""
@@ -167,6 +171,10 @@ if __name__ == '__main__':
     ) """
     db_busquedas = SQLContext(nombre_tabla='busquedas')
     #db_busquedas.delete_table()
+    db_busquedas.add_column_nullable(
+        nombre_columna="empresas_totales",
+        tipo_dato="INTEGER"
+    )
     print(db_busquedas.show_table_columns())
     print(db_busquedas.get_table())
     print(db_busquedas.get_number_of_records())
