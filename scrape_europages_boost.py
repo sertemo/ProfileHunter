@@ -153,6 +153,8 @@ def scrape_europages_boost(
     # Instanciamos el hanlder de db
     db_busquedas:SQLContext = SQLContext(nombre_tabla=NOMBRE_TABLA)
     resume = False # Flag para saber si hemos continuado con la búsqueda
+    caza_terminada = False # Flag para evitar escribir en base de datos ni actualizar excels si no hay empresas nuevas cuando
+                            # Se ha terminado la caza
 
     # Verificamos con DB si existe ya esa búsqueda y restauramos el punto en el que nos encontramos:
     if (campos:=db_busquedas.find_one(campo_buscado='sector', valor_buscado=sector_busqueda)):
@@ -286,9 +288,18 @@ def scrape_europages_boost(
 
         listas_totales_fly =  len(ols)        
         # Comprobaciones si reanuda
-        if resume and (listas_totales != listas_totales_fly):
-            msg = f"[{sector_busqueda}] || Atención: las listas totales guardadas no coinciden con las listas totales calculadas"
-            handle_log_print(msg, color="rojo", **kwargs)
+        if resume:
+            if (listas_totales != listas_totales_fly):
+                msg = f"[{sector_busqueda}] || Atención: las listas totales guardadas no coinciden con las listas totales calculadas"
+                handle_log_print(msg, color="rojo", **kwargs)
+            # Antes de loopear verificamos, en caso de resume si hay nuevas empresas para loopear
+            if (int(num_empresas.text) == empresas_totales) and (numero_paginas == pag_totales):
+                # Si entra por aqui significa que no ha habido empresas nueva añadidas, salimos del bucle
+                msg = f"[{sector_busqueda}] || No hay nuevas empresas para cazar. Terminando..."
+                handle_log_print(msg, color="magenta", **kwargs)
+                caza_terminada = True
+                break
+
         # Loopeamos sobre las LISTAS
         for i in range(lista_resume, listas_totales_fly + 1):
             # Comprobamos si se ha alcanzado límite máximo
@@ -425,7 +436,6 @@ def scrape_europages_boost(
                     time.sleep(4)
                     # Aqui deberiamos estar de vuelta en la página con todos los resultados
 
-
                 except Exception as exc:
                     msg = f"[{sector_busqueda}] || Ha habido algun error sacando la información: {exc}"
                     handle_log_print(msg, color='rojo_fuerte', **kwargs )
@@ -456,39 +466,41 @@ def scrape_europages_boost(
         
     # Fuera de todo bucle
     # Si se ha reanudado actualizamos en DB si es nueva búsqueda insertamos en db
-    try:
-        handle_insert_db(
-            db_busquedas,
-            resume,
-            sector_busqueda,
-            finish_pag=finish_pag,
-            finish_lista=finish_lista,
-            finish_elemento=finish_elemento,
-            paginas_totales=numero_paginas,
-            listas_totales=listas_totales_fly,
-            elementos_totales=elementos_totales_fly,
-            empresas_totales=int(num_empresas.text),
-        )
-        msg = f"[{sector_busqueda}] || Se ha guardado correctamente en base de datos el checkpoint."
-        handle_log_print(msg, color='verde_fuerte', **kwargs)
-    except Exception as e:
-        msg = f"[{sector_busqueda}] || No se ha podido insertar en base de datos.: {e}"
-        handle_log_print(msg, color='rojo_fuerte', **kwargs)
-
-    try:
-        archivo_excel = convertir_a_excel(
-            contactos,
-            sector_busqueda,
-            search_page,
-            excel_folder,
-            resume_flag=resume
-        )
-        estado_excel = 'ACTUALIZADO' if resume else 'REALIZADO'
-        msg = f"[{sector_busqueda}] || Excel {estado_excel} con éxito:\n {archivo_excel}"
-        handle_log_print(msg, color='verde_fuerte', **kwargs)
-    except Exception as e:
-        msg = f"[{sector_busqueda}] || No se ha podido realizar el excel:\n {e}"
-        handle_log_print(msg, color='rojo_fuerte', **kwargs)
+    if not caza_terminada:
+        # Metemos en db
+        try:
+            handle_insert_db(
+                db_busquedas,
+                resume,
+                sector_busqueda,
+                finish_pag=finish_pag,
+                finish_lista=finish_lista,
+                finish_elemento=finish_elemento,
+                paginas_totales=numero_paginas,
+                listas_totales=listas_totales_fly,
+                elementos_totales=elementos_totales_fly,
+                empresas_totales=int(num_empresas.text),
+            )
+            msg = f"[{sector_busqueda}] || Se ha guardado correctamente en base de datos el checkpoint."
+            handle_log_print(msg, color='verde_fuerte', **kwargs)
+        except Exception as e:
+            msg = f"[{sector_busqueda}] || No se ha podido insertar en base de datos.: {e}"
+            handle_log_print(msg, color='rojo_fuerte', **kwargs)
+        # Guardamos el excel
+        try:
+            archivo_excel = convertir_a_excel(
+                contactos,
+                sector_busqueda,
+                search_page,
+                excel_folder,
+                resume_flag=resume
+            )
+            estado_excel = 'ACTUALIZADO' if resume else 'REALIZADO'
+            msg = f"[{sector_busqueda}] || Excel {estado_excel} con éxito:\n {archivo_excel}"
+            handle_log_print(msg, color='verde_fuerte', **kwargs)
+        except Exception as e:
+            msg = f"[{sector_busqueda}] || No se ha podido realizar el excel:\n {e}"
+            handle_log_print(msg, color='rojo_fuerte', **kwargs)
 
     try:
         # Por si sigue abierto el driver

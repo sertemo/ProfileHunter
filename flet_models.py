@@ -169,7 +169,7 @@ class LineaCheckpoint(ft.UserControl):
                     ft.Container(width=3),
                     ft.Container(
                         ft.Row([
-                            ft.Text(self.num_empresas, color=PALETA_TALSA['DIVIDER COLOR'], size=9),
+                            ft.Text(self.num_empresas, color=PALETA_TALSA['AZUL TALSA'], size=9),
                             ft.Text(f"{self.sector}", color=ft.colors.BLACK87, size=18),                            
                         ],
                         alignment=ft.MainAxisAlignment.NONE),
