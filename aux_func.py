@@ -43,7 +43,8 @@ def handle_insert_db(
         finish_elemento:int,
         paginas_totales:int,
         listas_totales:int,
-        elementos_totales:int) -> None:
+        elementos_totales:int,
+        empresas_totales:int) -> None:
     """Inserta o actualiza un registro en db en función de si su búsqueda ya se había empezado a realizar
 
     Parameters
@@ -67,8 +68,8 @@ def handle_insert_db(
     elementos_totales : int
         _description_
     """
-    col_act = ['pagina', 'lista', 'elemento', 'paginas_totales', 'listas_totales', 'elementos_totales', 'fecha']
-    new_values = [finish_pag, finish_lista, finish_elemento, paginas_totales, listas_totales, elementos_totales, fecha_string(formato_dia_hora)]
+    col_act = ['pagina', 'lista', 'elemento', 'paginas_totales', 'listas_totales', 'elementos_totales', 'fecha', "empresas_totales"]
+    new_values = [finish_pag, finish_lista, finish_elemento, paginas_totales, listas_totales, elementos_totales, fecha_string(formato_dia_hora), empresas_totales]
     sector = sector.lower().strip() # Siempre en minúsculas y sin espacios
     
     if resume_flag:

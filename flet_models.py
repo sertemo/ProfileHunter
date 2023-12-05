@@ -22,7 +22,7 @@ PALETA_TALSA = {
     'ACCENT COLOR': '#536DFE',
     'PRIMARY TEXT': '#212121',
     'SECONDARY TEXT': '#757575',
-    'DIVIDER COLOR': '#BDBDBD'
+    'DIVIDER COLOR': '#7F9172'
 }
 
 PORCENTAJE_COLOR_MAP = {
@@ -83,12 +83,12 @@ class LineaBusqueda(ft.UserControl):
     def build(self) -> ft.Container:
         return ft.Container(
             ft.Row([
-                ft.Text(self.sector, color=PALETA['Blanco'], size=16),
+                ft.Text(self.sector, color=ft.colors.BLACK87, size=16),
                 ft.IconButton(key=self.sector, icon=ft.icons.DELETE, icon_color=ft.colors.RED_400, on_click=self.borrar_busqueda)
             ],
             alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
             border_radius=8, 
-            bgcolor=PALETA_TALSA['AZUL TALSA'],
+            bgcolor=ft.colors.WHITE,
             border=ft.border.all(1, PALETA_TALSA['PRIMARY TEXT']),
             padding=5,
             alignment=ft.alignment.center
@@ -105,25 +105,27 @@ class LineaCheckpoint(ft.UserControl):
                 listas_totales:int,
                 elementos_totales:int,
                 fecha:str,
+                num_empresas:int,
                 agregar_func:Callable[[None], None],
                 borrar_func:Callable[[None], None],
                 ) -> None:
         super().__init__()        
         self.sector = sector
         self.fecha = fecha
+        self.num_empresas = num_empresas
         self.avance = [(pagina, paginas_totales), (lista, listas_totales), (elemento, elementos_totales)]
         self.agregar_func = agregar_func
         self.borrar_func = borrar_func
         self.icono_rastrear = ft.IconButton(key=self.sector, 
                                             icon=ft.icons.FIND_IN_PAGE,
-                                            icon_color=ft.colors.WHITE,
+                                            icon_color=PALETA_TALSA["AZUL TALSA"],
                                             tooltip=f"Rastrea y comprueba si hay actualizaciones para {self.sector}",
-                                            on_click="",
+                                            on_click=self.agregar_func
                                             )        
         self.icono_agregar = ft.IconButton(key=self.sector, 
                                             icon=ft.icons.ARROW_BACK, 
-                                            icon_color=ft.colors.WHITE,
-                                            tooltip=f"Agrega {self.sector} a la búsqueda",
+                                            icon_color=PALETA_TALSA["AZUL TALSA"],
+                                            tooltip=f"Reanuda la caza de '{self.sector}'",
                                             on_click=self.agregar_func
                                             )
         self.icono_eliminar = ft.IconButton(key=(self.sector, self.porcentaje_avance), 
@@ -133,9 +135,10 @@ class LineaCheckpoint(ft.UserControl):
                                             on_click=self.borrar_func
                                             )
         self.progress_bar = ft.ProgressBar(height=4,
-                                        color=self.color_porcentaje, 
-                                        value=self.porcentaje_avance, 
-                                           tooltip=f"{round(self.porcentaje_avance * 100, 1)}%"
+                                        color=PALETA['Verde Secundario'], # se deja color verde siempre. 
+                                        value=self.porcentaje_avance,
+                                        bgcolor=ft.colors.BLACK87,
+                                        tooltip=f"{round(self.porcentaje_avance * 100, 1)}%"
                                         )
 
     @property
@@ -163,8 +166,15 @@ class LineaCheckpoint(ft.UserControl):
                 self.progress_bar,
                 ft.Row([
                     #ft.Container(ft.Text(f"{self.porcentaje_avance:.1%}", color=PALETA['Blanco']), width=60 , bgcolor=self.color_porcentaje, border_radius=5, padding=5), #Porcentaje
-                    ft.Container(width=10),
-                    ft.Container(ft.Text(f"{self.sector}", color=PALETA['Blanco'], size=18), width=170),
+                    ft.Container(width=3),
+                    ft.Container(
+                        ft.Row([
+                            ft.Text(self.num_empresas, color=PALETA_TALSA['DIVIDER COLOR'], size=9),
+                            ft.Text(f"{self.sector}", color=ft.colors.BLACK87, size=18),                            
+                        ],
+                        alignment=ft.MainAxisAlignment.NONE),
+                    width=200,
+                    padding=2),
                     ft.Container(ft.Text(self.fecha, color=PALETA_TALSA['DIVIDER COLOR'], size=11), width=110),             
                     ft.Container(self.fila_iconos)                    
                 ],
@@ -175,7 +185,7 @@ class LineaCheckpoint(ft.UserControl):
             ),
             height=60,
             border_radius=8, 
-            bgcolor=PALETA_TALSA['AZUL TALSA'],
+            bgcolor=ft.colors.WHITE,
             padding=0,
             border=ft.border.all(1, PALETA_TALSA['PRIMARY TEXT']),
             alignment=ft.alignment.center,
@@ -197,7 +207,7 @@ class LineaCheckpoint(ft.UserControl):
         porcentaje = elementos_procesados / total_elementos
         return porcentaje
     
-    @property
+    @property # Esta función ya no se usa
     def color_porcentaje(self) -> str:
         porcentaje = math.ceil(self.porcentaje_avance * 100)
         for rango in PORCENTAJE_COLOR_MAP:

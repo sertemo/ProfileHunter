@@ -37,7 +37,7 @@ WIN_WIDTH:int = 970
 TITLE_APP = 'Profile Hunter 1.0'
 
 color_border_contenedor = PALETA_TALSA["ROJO TALSA"]
-grosor_borde_contenedor = 2
+grosor_borde_contenedor = 3
 radio_bordes = 8
 TEXTS_SIZE = 16
 TITLE_STYLE = ft.TextThemeStyle.HEADLINE_MEDIUM
@@ -46,7 +46,7 @@ DICT_BORDES = {
     "width": grosor_borde_contenedor,
 }
 PARAMETROS_INPUTS = {
-    'color': PALETA['Azul menos oscuro Logo'],
+    'color': ft.colors.BLACK,
     'height': 45,
     'border_radius':radio_bordes,
     'width':200,
@@ -329,7 +329,7 @@ def main(page:ft.Page):
         lista_checkpoints = db_busquedas.get_table()
         if lista_checkpoints:
             for check in lista_checkpoints:
-                _, sector, pagina, lista, elemento, paginas_totales, listas_totales, elementos_totales, fecha, _ = check
+                _, sector, pagina, lista, elemento, paginas_totales, listas_totales, elementos_totales, fecha, num_empresas = check
                 fila_checkpoint = LineaCheckpoint(
                     sector,
                     pagina,
@@ -339,6 +339,7 @@ def main(page:ft.Page):
                     listas_totales,
                     elementos_totales,
                     fecha,
+                    num_empresas,
                     agregar_a_busqueda_checkpoint,
                     abrir_dialogo_modal,
                 )
@@ -487,8 +488,8 @@ def main(page:ft.Page):
     boton_guardar_path = ft.IconButton(
         icon=ft.icons.SAVE, 
         tooltip="Guarda el Path", 
-        bgcolor=PALETA_TALSA['ROJO TALSA'], 
-        icon_color=PALETA_TALSA['PRIMARY TEXT'],
+        bgcolor=PALETA_TALSA['AZUL TALSA'], 
+        icon_color=ft.colors.WHITE,
         on_click=guardar_excels_path,
         )
     dropdown_pagina_busqueda = ft.Dropdown(
@@ -516,8 +517,8 @@ def main(page:ft.Page):
     boton_agregar_busqueda = ft.IconButton(
         icon=ft.icons.ARROW_DOWNWARD, 
         tooltip="Agrega una búsqueda", 
-        bgcolor=PALETA_TALSA['ROJO TALSA'], 
-        icon_color=PALETA_TALSA['PRIMARY TEXT'],
+        bgcolor=PALETA_TALSA['AZUL TALSA'], 
+        icon_color=ft.colors.WHITE,
         on_click=agregar_busqueda,
         )
     
@@ -531,8 +532,8 @@ def main(page:ft.Page):
         text="Cazar",
         icon=ft.icons.ARROW_FORWARD_IOS_ROUNDED,
         elevation=5,
-        bgcolor=PALETA_TALSA["ROJO TALSA"],
-        color=PALETA_TALSA['PRIMARY TEXT'],
+        bgcolor=PALETA_TALSA["AZUL TALSA"],
+        color=ft.colors.WHITE,
         tooltip="Lanzar la caza",
         on_click=hunt,
     )
@@ -554,8 +555,8 @@ def main(page:ft.Page):
         text="Limpiar",
         icon=ft.icons.CLEAR,
         elevation=5,
-        bgcolor=PALETA_TALSA["ROJO TALSA"],
-        color=PALETA_TALSA['PRIMARY TEXT'],
+        bgcolor=PALETA_TALSA["AZUL TALSA"],
+        color=ft.colors.WHITE,
         tooltip="Limpiar consola",
         on_click=limpiar_consola,
     )
@@ -564,14 +565,14 @@ def main(page:ft.Page):
         text="Descargar log",
         icon=ft.icons.DOWNLOAD,
         elevation=5,
-        bgcolor=PALETA_TALSA["ROJO TALSA"],
-        color=PALETA_TALSA['PRIMARY TEXT'],
+        bgcolor=PALETA_TALSA["AZUL TALSA"],
+        color=ft.colors.WHITE,
         tooltip="Descargar todo el Log en formato txt",
         on_click=descargar_log,
     )
 
     iniciar_rutas()
-    texto_numero_de_checkpoints = ft.Text(color=PALETA['Blanco'], style=ft.TextThemeStyle.LABEL_MEDIUM)
+    texto_numero_de_checkpoints = ft.Text(color=PALETA_TALSA['AZUL TALSA'], style=ft.TextThemeStyle.LABEL_MEDIUM)
     cargar_checkpoints() # puebla la listview
     
     # Contenedores principales #
@@ -579,7 +580,7 @@ def main(page:ft.Page):
             ft.Row([
                 ft.Container(
                     ft.Column([
-                        ft.Text("Definir la caza", color=PALETA_TALSA['TEXT ICONS'], style=TITLE_STYLE),
+                        ft.Text("Definir la caza", color=PALETA_TALSA['AZUL TALSA'], style=TITLE_STYLE, weight="bold"),
                         ft.Row([
                             path_input_text,
                             boton_guardar_path,
@@ -595,7 +596,8 @@ def main(page:ft.Page):
                             bgcolor=PALETA_TALSA['DIVIDER COLOR'],
                             padding=8,
                             border_radius=8,
-                            border=ft.border.all(1, PALETA_TALSA['PRIMARY TEXT'])
+                            border=ft.border.all(1, PALETA_TALSA['PRIMARY TEXT']),
+                            tooltip="Panel de caza"
                             ),
                         #ft.Container(
                         #    checkbox_log,
@@ -608,7 +610,7 @@ def main(page:ft.Page):
                     ],
                     alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                     ),
-                    bgcolor=PALETA_TALSA['AZUL TALSA'],
+                    bgcolor="#E0E0E0",
                     padding=20,
                     width=350,
                     border=ft.border.all(**DICT_BORDES),
@@ -616,7 +618,7 @@ def main(page:ft.Page):
                     ), # Búsquedas
                 ft.Container(
                     ft.Column([
-                        ft.Row([ft.Text("Checkpoints guardados", color=PALETA['Blanco'], style=TITLE_STYLE), texto_numero_de_checkpoints]),
+                        ft.Row([ft.Text("Checkpoints guardados", color=PALETA_TALSA['AZUL TALSA'], style=TITLE_STYLE, weight="bold"), texto_numero_de_checkpoints]),
                         ft.Container(
                             listview_checkpoints,
                             bgcolor=PALETA_TALSA['DIVIDER COLOR'],
@@ -624,18 +626,19 @@ def main(page:ft.Page):
                             border_radius=8,
                             border=ft.border.all(1, PALETA_TALSA['PRIMARY TEXT']),
                         ),
-                        ft.Text("Log", color=PALETA['Blanco'], style=TITLE_STYLE),
+                        ft.Text("Log", color=PALETA_TALSA['AZUL TALSA'], style=TITLE_STYLE, weight="bold"),
                         ft.Container(
                             listview_consola,
                             bgcolor=ft.colors.BLACK87,
                             padding=8,
                             border_radius=8,
-                            border=ft.border.all(2, ft.colors.WHITE38)
+                            border=ft.border.all(2, ft.colors.WHITE38),
+                            tooltip="Consola"
                         ),
                         ft.Row([boton_descargar_log, boton_limpiar_consola], alignment=ft.MainAxisAlignment.END),
                     ],
                     alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
-                    bgcolor=PALETA_TALSA['AZUL TALSA'],
+                    bgcolor="#E0E0E0",
                     padding=20,
                     width=550,
                     border=ft.border.all(**DICT_BORDES),

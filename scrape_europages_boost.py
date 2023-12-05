@@ -140,7 +140,7 @@ def scrape_europages_boost(
         sector_busqueda:str,
         segundos_espera:int=10,
         max_extracciones:int|None=None,
-        excel_folder:Path=Path.home() / Path('data'),
+        excel_folder:Path=Path.home() / Path('ProfileHunter/data'),
         kwargs={},
 ) -> None:
     # Validamos aqui los kwargs antes de lanzar los bucles    
@@ -158,7 +158,7 @@ def scrape_europages_boost(
     if (campos:=db_busquedas.find_one(campo_buscado='sector', valor_buscado=sector_busqueda)):
         resume = True
         _, sector, pag_resume, lista_resume, elemento_resume, *resto = campos
-        pag_totales, listas_totales, elementos_totales, _, _ = resto
+        pag_totales, listas_totales, elementos_totales, fecha, empresas_totales = resto
         if sector != sector_busqueda:
             msg = f"[{sector_busqueda}] || Los nombres de los sectores no coinciden"
             handle_log_print(msg, color='rojo_fuerte', **kwargs)
@@ -166,10 +166,9 @@ def scrape_europages_boost(
         # Verificamos si ya hemos alcanzado el final de búsqueda
         if (pag_resume == pag_totales) and (lista_resume == listas_totales) and (elemento_resume == elementos_totales):
             # Se han realizado todas las búsquedas
-            msg = f"[{sector_busqueda}] || Se han realizado todas las búsquedas. Elimina los checkpoints para comenzar de nuevo las búsquedas para este sector."
+            msg = f"[{sector_busqueda}] || Se han realizado todas las búsquedas. Se rastreará en busca de nuevas empresas..."
             handle_log_print(msg, color='magenta', **kwargs)
             print(Style.RESET_ALL)
-            return
 
         msg = f"[{sector_busqueda}] || Reanudando la búsqueda a partir de página {pag_resume}, lista {lista_resume}, elemento {elemento_resume}"
         handle_log_print(msg, color='amarillo', **kwargs)
@@ -208,7 +207,7 @@ def scrape_europages_boost(
         msg = f"[{sector_busqueda}] || Número de empresas encontradas: {num_empresas.text}"
         handle_log_print(msg, color='amarillo', **kwargs)
     except Exception as e:
-        msg = f"[{sector_busqueda}] || Ha fallado la búsqueda del número de empresas: {e}"
+        msg = f"[{sector_busqueda}] || Ha fallado la búsqueda del número de empresas: {e[:150]}"
         handle_log_print(msg, color='rojo_fuerte', **kwargs)
         driver.quit()
         print(Style.RESET_ALL)
@@ -468,6 +467,7 @@ def scrape_europages_boost(
             paginas_totales=numero_paginas,
             listas_totales=listas_totales_fly,
             elementos_totales=elementos_totales_fly,
+            empresas_totales=int(num_empresas.text),
         )
         msg = f"[{sector_busqueda}] || Se ha guardado correctamente en base de datos el checkpoint."
         handle_log_print(msg, color='verde_fuerte', **kwargs)
@@ -484,10 +484,10 @@ def scrape_europages_boost(
             resume_flag=resume
         )
         estado_excel = 'ACTUALIZADO' if resume else 'REALIZADO'
-        msg = f"[{sector_busqueda}] || Excel {estado_excel} con éxito: {archivo_excel}"
+        msg = f"[{sector_busqueda}] || Excel {estado_excel} con éxito:\n {archivo_excel}"
         handle_log_print(msg, color='verde_fuerte', **kwargs)
     except Exception as e:
-        msg = f"[{sector_busqueda}] || No se ha podido realizar el excel: {e}"
+        msg = f"[{sector_busqueda}] || No se ha podido realizar el excel:\n {e}"
         handle_log_print(msg, color='rojo_fuerte', **kwargs)
 
     try:

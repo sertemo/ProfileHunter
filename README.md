@@ -19,7 +19,7 @@ La idea de la aplicación es la siguiente:
 - Los archivos Excels generado se guardan en la ruta mostrada en las instrucciones
 - Esta aplicación combina con **PsK Mailing** también para TALSA.
 
-## Mejoras a implementar
-- Cambiar colores de avance de checkpoints, todos en verde
-- Cuando un checkpoint ha alcanzado el 100%, cambiar icono de añadir a búsqueda por 'comprobar actualizaciones' que lo que haga sea comprobar que el número máximo de empresas con ese sector sea el mismo que el guardado en base de datos [DONE]
-- Añadir la funcionalidad del nuevo botón
+## Modificaciones
+- 04/12/2023: Cambiar colores de avance de checkpoints, todos en verde
+- 04/12/2023: Cuando un checkpoint ha alcanzado el 100%, cambiar icono de añadir a búsqueda por 'comprobar actualizaciones' que lo que haga sea comprobar que el número máximo de empresas con ese sector sea el mismo que el guardado en base de datos
+- 04/12/2023: Añadir nuevo campo a la base de datos 'empresas_totales'
