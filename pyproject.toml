@@ -19,6 +19,7 @@ colorama = "^0.4.6"
 flet = "^0.11.0"
 pyinstaller = "^6.3.0"
 nuitka = "^1.9.7"
+toml = "^0.10.2"
 
 
 [build-system]

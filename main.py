@@ -1,4 +1,5 @@
 import flet as ft
+import toml
 
 from scrape_europages_boost import scrape_europages_boost, NOMBRE_TABLA
 from aux_func import (fecha_string, 
@@ -34,7 +35,9 @@ from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 opciones_busqueda = ['Europages']
 WIN_HEIGHT:int = 880
 WIN_WIDTH:int = 970
-TITLE_APP = 'Profile Hunter 1.0'
+PYPROJECT_FILE = toml.load('pyproject.toml')
+VERSION_APP = PYPROJECT_FILE['tool']['poetry']['version']
+TITLE_APP = f'Profile Hunter v{VERSION_APP}'
 
 color_border_contenedor = PALETA_TALSA["ROJO TALSA"]
 grosor_borde_contenedor = 3

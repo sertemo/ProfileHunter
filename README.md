@@ -1,4 +1,4 @@
-# Profile Hunter
+# Profile Hunter v0.1.0
 # Aplicación para TALSA para encontrar potenciales clientes consumidores de perfil metálico
 # 🌐🗺️🧲🖋️🧾
 La idea de la aplicación es la siguiente:
@@ -9,7 +9,7 @@ La idea de la aplicación es la siguiente:
 - Se realizará un IU amigable con **Flet**
 
 ## App
-![Alt text](assets/img/profilehunter.JPG)
+![alt text](<assets/img/porfile hunter v0.1.0.JPG>)
 
 ## Uso
 - Si es la primera vez que ejecutas la app se mostrará un mensaje de bienvenida y unas instrucciones
@@ -19,7 +19,8 @@ La idea de la aplicación es la siguiente:
 - Los archivos Excels generado se guardan en la ruta mostrada en las instrucciones
 - Esta aplicación combina con **PsK Mailing** también para TALSA.
 
-## Modificaciones
+## Updates
 - 04/12/2023: Cambiar colores de avance de checkpoints, todos en verde
 - 04/12/2023: Cuando un checkpoint ha alcanzado el 100%, cambiar icono de añadir a búsqueda por 'comprobar actualizaciones' que lo que haga sea comprobar que el número máximo de empresas con ese sector sea el mismo que el guardado en base de datos
 - 04/12/2023: Añadir nuevo campo a la base de datos 'empresas_totales'
+- 30/03/2024: Añadida versión a la app cogida de pyproject.toml. versionado según la documentación de poetry

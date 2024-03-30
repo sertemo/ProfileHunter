@@ -1441,6 +1441,17 @@ requests = ">=2.1.0"
 requests-file = ">=1.4"
 
 [[package]]
+name = "toml"
+version = "0.10.2"
+description = "Python Library for Tom's Obvious, Minimal Language"
+optional = false
+python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
+files = [
+    {file = "toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"},
+    {file = "toml-0.10.2.tar.gz", hash = "sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f"},
+]
+
+[[package]]
 name = "trio"
 version = "0.22.2"
 description = "A friendly Python library for async concurrency and I/O"
@@ -1739,4 +1750,4 @@ cffi = ["cffi (>=1.11)"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.11,<3.13"
-content-hash = "0f3549909be71854d9a2738b8e6f3743cec8c23bb3f82e0532e91c2efdff0b65"
+content-hash = "5bae7e24bdd39d0bc3a3a3dea32cbb327a5430751594ab786782accc898be563"
